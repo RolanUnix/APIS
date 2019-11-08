@@ -15,10 +15,11 @@ namespace APIS.Packets
         public string VersionHttp;
 
         public Dictionary<string, string> GetParameters;
+        public Dictionary<string, string> PostParameters;
 
         public Dictionary<string, string> Headers;
 
-        public char[] Content;
+        public byte[] Content;
 
         private Request()
         {
@@ -27,6 +28,7 @@ namespace APIS.Packets
 
             Headers = new Dictionary<string, string>();
             GetParameters = new Dictionary<string, string>();
+            PostParameters = new Dictionary<string, string>();
         }
 
         public static Request Parse(byte[] httpPacket)
@@ -38,7 +40,7 @@ namespace APIS.Packets
                 var bufferBuilder = new StringBuilder();
                 var action = ActionParse.Method;
                 var headerKey = string.Empty;
-                var content = new List<char>();
+                var content = new List<byte>();
 
                 int symbol;
 
@@ -123,7 +125,7 @@ namespace APIS.Packets
 
                             break;
                         case ActionParse.Content:
-                            content.Add((char)symbol);
+                            content.Add((byte)symbol);
                             break;
                     }
                 } while (symbol != -1);
@@ -154,6 +156,31 @@ namespace APIS.Packets
                     }
 
                     request.Uri = splitUri[0];
+                }
+
+                if (request.Method == Method.POST)
+                {
+                    try
+                    {
+                        var postString = Encoding.UTF8.GetString(request.Content);
+                        var postParameters = postString.Split('&');
+                        foreach (var postParameter in postParameters)
+                        {
+                            var parameter = postParameter.Split(new [] { '=' }, 2);
+                            if (parameter.Length == 2)
+                            {
+                                request.PostParameters.Add(parameter[0], parameter[1]);
+                            }
+                            else
+                            {
+                                throw new Exception();
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
             }
 

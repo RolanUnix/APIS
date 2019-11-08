@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Tests.Index</StartupObject>
+    <StartupObject>Tests.PostParameters</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -56,6 +56,7 @@
     <Compile Include="tests\GetParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tests\Index.cs" />
+    <Compile Include="tests\PostParameters.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
