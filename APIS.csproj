@@ -42,13 +42,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\APIS.cs" />
-    <Compile Include="src\Exception\BadRequestException.cs" />
-    <Compile Include="src\Exception\HttpException.cs" />
-    <Compile Include="src\Exception\MethodNotAllowedException.cs" />
-    <Compile Include="src\Method.cs" />
-    <Compile Include="src\Packet\ActionParse.cs" />
-    <Compile Include="src\Packet\Request.cs" />
-    <Compile Include="src\Packet\Response.cs" />
+    <Compile Include="src\Exceptions\BadRequestException.cs" />
+    <Compile Include="src\Exceptions\HttpException.cs" />
+    <Compile Include="src\Exceptions\InternalServerException.cs" />
+    <Compile Include="src\Exceptions\MethodNotAllowedException.cs" />
+    <Compile Include="src\Exceptions\NotFoundException.cs" />
+    <Compile Include="src\Enums\Method.cs" />
+    <Compile Include="src\Enums\ActionParse.cs" />
+    <Compile Include="src\Packets\Request.cs" />
+    <Compile Include="src\Packets\Response.cs" />
     <Compile Include="tests\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
