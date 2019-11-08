@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Text;
 using APIS.Enums;
@@ -13,6 +14,8 @@ namespace APIS.Packets
         public string Uri;
         public string VersionHttp;
 
+        public Dictionary<string, string> GetParameters;
+
         public Dictionary<string, string> Headers;
 
         public char[] Content;
@@ -23,6 +26,7 @@ namespace APIS.Packets
             VersionHttp = string.Empty;
 
             Headers = new Dictionary<string, string>();
+            GetParameters = new Dictionary<string, string>();
         }
 
         public static Request Parse(byte[] httpPacket)
@@ -127,6 +131,30 @@ namespace APIS.Packets
                 if (action != ActionParse.Content) throw new HttpException(Code.BadRequest);
 
                 request.Content = content.ToArray();
+
+                var splitUri = request.Uri.Split(new [] { '?' }, 2, StringSplitOptions.RemoveEmptyEntries);
+                
+                if (splitUri.Length == 2)
+                {
+                    var parameters = splitUri[1].Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var parameter in parameters)
+                    {
+                        var splitParameter = parameter.Split('=');
+
+                        if (splitParameter.Length == 2)
+                        {
+                            if (request.GetParameters.ContainsKey(splitParameter[0]))
+                                request.GetParameters[splitParameter[0]] = splitParameter[1];
+                            else request.GetParameters.Add(splitParameter[0], splitParameter[1]);
+                        }
+                        else
+                        {
+                            throw new HttpException(Code.BadRequest);
+                        }
+                    }
+
+                    request.Uri = splitUri[0];
+                }
             }
 
             return request;
