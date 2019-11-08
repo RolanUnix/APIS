@@ -2,8 +2,8 @@
 {
     public enum Method : int
     {
-        Get,
-        Post,
+        GET,
+        POST,
         Unknown
     }
 }
