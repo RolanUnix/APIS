@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using APIS.Enums;
 
 namespace APIS.Packets
 {
     public class Response
     {
-        private readonly int _code;
-        private readonly string _description;
+        private readonly Code _code;
         private readonly Dictionary<string, string> _headers;
         private readonly byte[] _content;
 
-        private Response(int code, string description, byte[] content)
+        private Response(Code code, byte[] content)
         {
             _code = code;
-            _description = description;
             _headers = new Dictionary<string, string>()
             {
                 {"Connection", "keep-alive"},
@@ -28,19 +27,19 @@ namespace APIS.Packets
 
         public static Response AsText(string text)
         {
-            return new Response(200, "OK", Encoding.UTF8.GetBytes(text))
+            return new Response(Code.Ok, Encoding.UTF8.GetBytes(text))
                 .AddHeader("Content-Type", "text/plain");
         }
 
         public static Response AsHtml(string text)
         {
-            return new Response(200, "OK", Encoding.UTF8.GetBytes(text))
+            return new Response(Code.Ok, Encoding.UTF8.GetBytes(text))
                 .AddHeader("Content-Type", "text/html");
         }
 
-        public static Response AsCustom(int code, string description, string contentType, byte[] content)
+        public static Response AsCustom(Code code, string contentType, byte[] content)
         {
-            return new Response(code, description, content)
+            return new Response(code, content)
                 .AddHeader("Content-Type", contentType);
         }
 
@@ -48,7 +47,7 @@ namespace APIS.Packets
         {
             _headers["Content-Type"] += "; charset=utf-8";
             AddHeader("Content-Length", _content.Length.ToString());
-            var result = Encoding.UTF8.GetBytes("HTTP/1.1 " + _code + " " + _description + "\r\n" + string.Join("\r\n", _headers.Select(obj => obj.Key + ": " + obj.Value)) + "\r\n\r\n").ToList();
+            var result = Encoding.UTF8.GetBytes("HTTP/1.1 " + (int)_code + " " + EnumHelper.GetEnumDescription(_code) + "\r\n" + string.Join("\r\n", _headers.Select(obj => obj.Key + ": " + obj.Value)) + "\r\n\r\n").ToList();
             result.AddRange(_content);
             return result.ToArray();
         }

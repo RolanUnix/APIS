@@ -3,7 +3,6 @@
     public enum Method : int
     {
         GET,
-        POST,
-        Unknown
+        POST
     }
 }

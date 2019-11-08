@@ -19,7 +19,6 @@ namespace APIS.Packets
 
         private Request()
         {
-            Method = Method.Unknown;
             Uri = string.Empty;
             VersionHttp = string.Empty;
 
@@ -57,7 +56,7 @@ namespace APIS.Packets
                                     break;
                                 }
 
-                                throw new MethodNotAllowedException();
+                                throw new HttpException(Code.MethodNotAllowed);
                             }
 
                             bufferBuilder.Append((char)symbol);
@@ -91,7 +90,7 @@ namespace APIS.Packets
                             if (symbol == ':')
                             {
                                 symbol = memoryStream.ReadByte();
-                                if (symbol != ' ') throw new BadRequestException();
+                                if (symbol != ' ') throw new HttpException(Code.BadRequest);
                                 headerKey = bufferBuilder.ToString();
                                 bufferBuilder.Clear();
                                 action = ActionParse.HeaderValue;
@@ -125,7 +124,7 @@ namespace APIS.Packets
                     }
                 } while (symbol != -1);
 
-                if (action != ActionParse.Content) throw new BadRequestException();
+                if (action != ActionParse.Content) throw new HttpException(Code.BadRequest);
 
                 request.Content = content.ToArray();
             }

@@ -42,12 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\APIS.cs" />
+    <Compile Include="src\EnumHelper.cs" />
     <Compile Include="src\Enums\Code.cs" />
-    <Compile Include="src\Exceptions\BadRequestException.cs" />
     <Compile Include="src\Exceptions\HttpException.cs" />
-    <Compile Include="src\Exceptions\InternalServerException.cs" />
-    <Compile Include="src\Exceptions\MethodNotAllowedException.cs" />
-    <Compile Include="src\Exceptions\NotFoundException.cs" />
     <Compile Include="src\Enums\Method.cs" />
     <Compile Include="src\Enums\ActionParse.cs" />
     <Compile Include="src\Packets\Request.cs" />

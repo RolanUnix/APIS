@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using APIS.Enums;
 using APIS.Exceptions;
 using APIS.Packets;
 
@@ -106,7 +107,7 @@ namespace APIS
 
                     var handler = this[packet.Uri];
 
-                    if (handler == null) throw new NotFoundException();
+                    if (handler == null) throw new HttpException(Code.NotFound);
 
                     client.Client.Send(handler.Invoke(packet).AsHttp());
                 }
@@ -115,7 +116,7 @@ namespace APIS
                     HttpException error;
 
                     if (e is HttpException) error = (HttpException)e;
-                    else error = new InternalServerException(_debug ? e.ToString() : null);
+                    else error = new HttpException(Code.InternalServerError, _debug ? e.ToString() : null);
 
                     if (client.Connected)
                     {
