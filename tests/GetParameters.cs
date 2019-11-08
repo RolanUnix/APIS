@@ -17,7 +17,7 @@ namespace Tests
             var server = new WebServer(IPAddress.Any, 80);
             server.Start();
 
-            server["/"] = IndexHandler;
+            server[Method.GET, "/"] = IndexHandler;
         }
 
         private static Response IndexHandler(Request request)

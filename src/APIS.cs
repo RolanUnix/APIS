@@ -17,7 +17,7 @@ namespace APIS
     {
         public delegate Response UriHandler(Request request);
 
-        private readonly Dictionary<string, UriHandler> _handlers;
+        private readonly List<Handler> _handlers;
         private readonly IPAddress _bindAddress;
         private readonly int _port;
         private readonly bool _multiThreading;
@@ -27,20 +27,20 @@ namespace APIS
 
         private TcpListener _serverListener;
 
-        public UriHandler this[string uri]
+        public UriHandler this[Method method, string uri]
         {
-            get => _handlers.ContainsKey(uri) ? _handlers[uri] : null;
+            private get => _handlers.Any(obj => obj.Method == method && obj.Uri == uri) ? _handlers.First(obj => obj.Method == method && obj.Uri == uri).MethodHandler : null;
 
             set
             {
-                if (_handlers.ContainsKey(uri)) _handlers[uri] = value;
-                else _handlers.Add(uri, value);
+                if (this[method, uri] != null) throw new Exception("Handler already exists");
+                _handlers.Add(new Handler(method, uri, value));
             }
         }
 
-        public WebServer(IPAddress bindAddress, int port, bool multiThreading = true, bool debug = false)
+        public WebServer(IPAddress bindAddress, int port, bool multiThreading = true, bool debug = true)
         {
-            _handlers = new Dictionary<string, UriHandler>();
+            _handlers = new List<Handler>();
             _bindAddress = bindAddress;
             _port = port;
             _multiThreading = multiThreading;
@@ -105,7 +105,7 @@ namespace APIS
 
                     var packet = Request.Parse(buffer);
 
-                    var handler = this[packet.Uri];
+                    var handler = this[packet.Method, packet.Uri];
 
                     if (handler == null) throw new HttpException(Code.NotFound);
 
