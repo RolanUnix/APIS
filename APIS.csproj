@@ -42,6 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\APIS.cs" />
+    <Compile Include="src\Exception\BadRequestException.cs" />
+    <Compile Include="src\Exception\HttpException.cs" />
+    <Compile Include="src\Exception\MethodNotAllowedException.cs" />
+    <Compile Include="src\Method.cs" />
+    <Compile Include="src\Packet\ActionParse.cs" />
     <Compile Include="src\Packet\Request.cs" />
     <Compile Include="src\Packet\Response.cs" />
     <Compile Include="tests\Program.cs" />
