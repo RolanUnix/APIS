@@ -16,8 +16,6 @@ namespace Tests
             server.Start();
 
             server["/"] = IndexHandler;
-
-            Console.ReadLine();
         }
 
         private static Response IndexHandler(Request request)
