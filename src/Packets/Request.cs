@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Text;
+using System.Web;
 using APIS.Enums;
-using APIS.Exceptions;
+using HttpException = APIS.Exceptions.HttpException;
 
 namespace APIS.Packets
 {
@@ -71,7 +72,7 @@ namespace APIS.Packets
                         case ActionParse.Uri:
                             if (symbol == ' ')
                             {
-                                request.Uri = bufferBuilder.ToString();
+                                request.Uri = HttpUtility.UrlDecode(bufferBuilder.ToString());
                                 bufferBuilder.Clear();
                                 action = ActionParse.VersionHttp;
                                 break;
