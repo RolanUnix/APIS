@@ -27,14 +27,12 @@ namespace APIS.Packets
 
         public static Response AsText(string text)
         {
-            return new Response(Code.Ok, Encoding.UTF8.GetBytes(text))
-                .AddHeader("Content-Type", "text/plain");
+            return AsCustom(Code.Ok, "text/plain", Encoding.UTF8.GetBytes(text));
         }
 
         public static Response AsHtml(string text)
         {
-            return new Response(Code.Ok, Encoding.UTF8.GetBytes(text))
-                .AddHeader("Content-Type", "text/html");
+            return AsCustom(Code.Ok, "text/html", Encoding.UTF8.GetBytes(text));
         }
 
         public static Response AsCustom(Code code, string contentType, byte[] content)
