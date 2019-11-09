@@ -136,27 +136,34 @@ namespace APIS.Packets
                 request.Content = content.ToArray();
 
                 var splitUri = request.Uri.Split(new [] { '?' }, 2, StringSplitOptions.RemoveEmptyEntries);
-                
+                request.Uri = splitUri[0];
+
                 if (splitUri.Length == 2)
                 {
-                    var parameters = splitUri[1].Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var parameter in parameters)
+                    try
                     {
-                        var splitParameter = parameter.Split('=');
+                        var parameters = splitUri[1].Split(new char[] {'&'}, StringSplitOptions.RemoveEmptyEntries);
 
-                        if (splitParameter.Length == 2)
+                        foreach (var parameter in parameters)
                         {
-                            if (request.GetParameters.ContainsKey(splitParameter[0]))
-                                request.GetParameters[splitParameter[0]] = splitParameter[1];
-                            else request.GetParameters.Add(splitParameter[0], splitParameter[1]);
-                        }
-                        else
-                        {
-                            throw new HttpException(Code.BadRequest);
+                            var splitParameter = parameter.Split('=');
+
+                            if (splitParameter.Length == 2)
+                            {
+                                if (request.GetParameters.ContainsKey(splitParameter[0]))
+                                    request.GetParameters[splitParameter[0]] = splitParameter[1];
+                                else request.GetParameters.Add(splitParameter[0], splitParameter[1]);
+                            }
+                            else
+                            {
+                                throw new Exception();
+                            }
                         }
                     }
-
-                    request.Uri = splitUri[0];
+                    catch
+                    {
+                        // ignored
+                    }
                 }
 
                 if (request.Method == Method.POST)
