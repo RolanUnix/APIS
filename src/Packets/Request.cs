@@ -17,6 +17,7 @@ namespace APIS.Packets
 
         public Dictionary<string, string> GetParameters;
         public Dictionary<string, string> PostParameters;
+        public Dictionary<string, string> PatternParameters;
 
         public Dictionary<string, string> Headers;
 
@@ -27,9 +28,10 @@ namespace APIS.Packets
             Uri = string.Empty;
             VersionHttp = string.Empty;
 
-            Headers = new Dictionary<string, string>();
             GetParameters = new Dictionary<string, string>();
             PostParameters = new Dictionary<string, string>();
+            Headers = new Dictionary<string, string>();
+            PatternParameters = new Dictionary<string, string>();
         }
 
         public static Request Parse(byte[] httpPacket)

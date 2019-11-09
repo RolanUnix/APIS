@@ -29,7 +29,7 @@ namespace APIS
 
         public UriHandler this[Method method, string uri]
         {
-            private get => _handlers.Any(obj => obj.Method == method && obj.Uri == uri) ? _handlers.First(obj => obj.Method == method && obj.Uri == uri).MethodHandler : null;
+            private get => _handlers.Any(obj => obj.Method == method && obj.UriRegex.IsMatch(uri)) ? _handlers.First(obj => obj.Method == method && obj.UriRegex.IsMatch(uri)).MethodHandler : null;
 
             set
             {
@@ -105,11 +105,20 @@ namespace APIS
 
                     var packet = Request.Parse(buffer);
 
-                    var handler = this[packet.Method, packet.Uri];
+                    var methodHandler = this[packet.Method, packet.Uri];
 
-                    if (handler == null) throw new HttpException(Code.NotFound);
+                    if (methodHandler == null) throw new HttpException(Code.NotFound);
 
-                    client.Client.Send(handler.Invoke(packet).AsHttp());
+                    var handler = _handlers.First(obj => obj.MethodHandler == methodHandler);
+
+                    var matches = handler.UriRegex.Match(packet.Uri);
+
+                    for (var i = 0; i < handler.Parameters.Count; i++)
+                    {
+                        packet.PatternParameters.Add(handler.Parameters[i], matches.Groups[1 + i].Value);
+                    }
+
+                    client.Client.Send(methodHandler.Invoke(packet).AsHttp());
                 }
                 catch (Exception e)
                 {
