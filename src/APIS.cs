@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using APIS.Enums;
 using APIS.Exceptions;
 using APIS.Packets;
@@ -76,7 +77,7 @@ namespace APIS
 
                     if (_multiThreading)
                     {
-                        new Thread(_ => HandlerClient(client)).Start();
+                        Task.Factory.StartNew(() => HandlerClient(client));
                     }
                     else
                     {
@@ -92,6 +93,9 @@ namespace APIS
 
         private void HandlerClient(TcpClient client)
         {
+            client.ReceiveTimeout = 15000;
+            client.SendTimeout = 15000;
+
             do
             {
                 try
@@ -101,7 +105,7 @@ namespace APIS
 
                     buffer = buffer.Take(bytesAccepted).ToArray();
 
-                    if (buffer.Length == 0) continue;
+                    if (buffer.Length == 0) break;
 
                     var packet = Request.Parse(buffer);
 
