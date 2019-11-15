@@ -4,6 +4,7 @@ using System.Text;
 using APIS;
 using APIS.Enums;
 using APIS.Packets;
+using ContentType = System.Net.Mime.ContentType;
 
 namespace Tests
 {

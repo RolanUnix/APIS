@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Tests.Pattern</StartupObject>
+    <StartupObject>Tests.PostParameters</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -48,6 +48,7 @@
     <Compile Include="src\APIS.cs" />
     <Compile Include="src\EnumHelper.cs" />
     <Compile Include="src\Enums\Code.cs" />
+    <Compile Include="src\Enums\EContentType.cs" />
     <Compile Include="src\Exceptions\HttpException.cs" />
     <Compile Include="src\Enums\Method.cs" />
     <Compile Include="src\Enums\ActionParse.cs" />

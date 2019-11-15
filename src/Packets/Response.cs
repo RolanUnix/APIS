@@ -18,7 +18,6 @@ namespace APIS.Packets
             _code = code;
             _headers = new Dictionary<string, string>()
             {
-                {"Connection", "keep-alive"},
                 {"Date", DateTime.Now.ToString("r", CultureInfo.InvariantCulture)},
                 {"Server", "APIS"}
             };
@@ -55,7 +54,5 @@ namespace APIS.Packets
             _headers.Add(key, value);
             return this;
         }
-
-        private string GetHeader(string key) => _headers.ContainsKey(key) ? _headers[key] : null;
     }
 }

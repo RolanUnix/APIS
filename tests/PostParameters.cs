@@ -25,6 +25,9 @@ namespace Tests
                 builder.Append($"{parameter.Key} = {parameter.Value}<br>");
             }
 
+            builder.Append(Encoding.UTF8.GetString(request.Content));
+            builder.Append("<br>" + request.ContentType.Boundary);
+
             return Response.AsHtml(builder.ToString());
         }
     }

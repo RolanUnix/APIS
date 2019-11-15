@@ -100,7 +100,7 @@ namespace APIS
             {
                 try
                 {
-                    var buffer = new byte[8 * 1024 * 1024];
+                    var buffer = new byte[16 * 1024 * 1024];
                     var bytesAccepted = client.Client.Receive(buffer);
 
                     buffer = buffer.Take(bytesAccepted).ToArray();
@@ -122,7 +122,11 @@ namespace APIS
                         packet.PatternParameters.Add(handler.Parameters[i], matches.Groups[1 + i].Value);
                     }
 
-                    client.Client.Send(methodHandler.Invoke(packet).AsHttp());
+                    var result = methodHandler.Invoke(packet);
+
+                    client.Client.Send(result.AsHttp());
+
+                    if (!_multiThreading || packet.GetHeader("Connection") == "close") break;
                 }
                 catch (Exception e)
                 {

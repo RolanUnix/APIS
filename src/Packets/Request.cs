@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
+using System.Net.Mime;
 using System.Text;
 using System.Web;
 using APIS.Enums;
+using ContentType = System.Net.Mime.ContentType;
 using HttpException = APIS.Exceptions.HttpException;
 
 namespace APIS.Packets
@@ -21,6 +23,7 @@ namespace APIS.Packets
 
         public Dictionary<string, string> Headers;
 
+        public ContentType ContentType;
         public byte[] Content;
 
         private Request()
@@ -118,7 +121,7 @@ namespace APIS.Packets
                         case ActionParse.HeaderValue:
                             if (symbol == '\n')
                             {
-                                request.Headers.Add(headerKey, bufferBuilder.ToString());
+                                request.Headers.Add(headerKey, bufferBuilder.ToString().ToLower());
                                 bufferBuilder.Clear();
                                 action = ActionParse.HeaderKey;
                                 break;
@@ -136,6 +139,19 @@ namespace APIS.Packets
                 if (action != ActionParse.Content) throw new HttpException(Code.BadRequest);
 
                 request.Content = content.ToArray();
+
+                try
+                {
+
+                    if (request.GetHeader("Content-Type") != null)
+                        request.ContentType = new ContentType(request.GetHeader("Content-Type"));
+                    else
+                        request.ContentType = new ContentType("text/plain");
+                }
+                catch
+                {
+                    throw new HttpException(Code.UnsupportedMediaType);
+                }
 
                 var splitUri = request.Uri.Split(new [] { '?' }, 2, StringSplitOptions.RemoveEmptyEntries);
                 request.Uri = splitUri[0];
@@ -168,11 +184,11 @@ namespace APIS.Packets
                     }
                 }
 
-                if (request.Method == Method.POST)
+                if (request.Method == Method.POST && request.ContentType.MediaType == EnumHelper.GetEnumDescription(EContentType.FormUrlEncoded))
                 {
                     try
                     {
-                        var postString = Encoding.UTF8.GetString(request.Content);
+                        var postString = Encoding.UTF8.GetString(content.ToArray());
                         var postParameters = postString.Split('&');
                         foreach (var postParameter in postParameters)
                         {
@@ -196,5 +212,7 @@ namespace APIS.Packets
 
             return request;
         }
+
+        public string GetHeader(string key) => Headers.ContainsKey(key.ToLower()) ? Headers[key.ToLower()] : null;
     }
 }
