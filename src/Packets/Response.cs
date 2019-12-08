@@ -36,7 +36,12 @@ namespace APIS.Packets
 
         public static Response AsJson(string json)
         {
-            return AsCustom(Code.Ok, "application/json", Encoding.UTF8.GetBytes(text));
+            return AsCustom(Code.Ok, "application/json", Encoding.UTF8.GetBytes(json));
+        }
+
+        public static Response AsRedirect()
+        {
+            return AsCustom(Code.TemporaryRedirect, "text/html", new byte[0]);
         }
 
         public static Response AsCustom(Code code, string contentType, byte[] content)

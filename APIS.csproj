@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6AB41BD9-4FC6-432C-A31A-F2D165E332C6}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>APIS</RootNamespace>
     <AssemblyName>APIS</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -32,7 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Tests.PostParameters</StartupObject>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -55,11 +56,7 @@
     <Compile Include="src\Handler.cs" />
     <Compile Include="src\Packets\Request.cs" />
     <Compile Include="src\Packets\Response.cs" />
-    <Compile Include="tests\GetParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="tests\Index.cs" />
-    <Compile Include="tests\Pattern.cs" />
-    <Compile Include="tests\PostParameters.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,5 +6,8 @@ namespace APIS.Enums
     {
         [Description("application/x-www-form-urlencoded")]
         FormUrlEncoded,
+
+        [Description("multipart/form-data")]
+        MultipartFormData,
     }
 }

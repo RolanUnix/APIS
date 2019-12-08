@@ -184,28 +184,31 @@ namespace APIS.Packets
                     }
                 }
 
-                if (request.Method == Method.POST && request.ContentType.MediaType == EnumHelper.GetEnumDescription(EContentType.FormUrlEncoded))
+                if (request.Method == Method.POST)
                 {
-                    try
+                    if (request.ContentType.MediaType == EnumHelper.GetEnumDescription(EContentType.FormUrlEncoded))
                     {
-                        var postString = Encoding.UTF8.GetString(content.ToArray());
-                        var postParameters = postString.Split('&');
-                        foreach (var postParameter in postParameters)
+                        try
                         {
-                            var parameter = postParameter.Split(new [] { '=' }, 2);
-                            if (parameter.Length == 2)
+                            var postString = Encoding.UTF8.GetString(content.ToArray());
+                            var postParameters = postString.Split('&');
+                            foreach (var postParameter in postParameters)
                             {
-                                request.PostParameters.Add(parameter[0], parameter[1]);
-                            }
-                            else
-                            {
-                                throw new Exception();
+                                var parameter = postParameter.Split(new[] {'='}, 2);
+                                if (parameter.Length == 2)
+                                {
+                                    request.PostParameters.Add(parameter[0], parameter[1]);
+                                }
+                                else
+                                {
+                                    throw new Exception();
+                                }
                             }
                         }
-                    }
-                    catch
-                    {
-                        // ignored
+                        catch
+                        {
+                            // ignored
+                        }
                     }
                 }
             }
