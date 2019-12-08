@@ -39,9 +39,10 @@ namespace APIS.Packets
             return AsCustom(Code.Ok, "application/json", Encoding.UTF8.GetBytes(json));
         }
 
-        public static Response AsRedirect()
+        public static Response AsRedirect(string uri)
         {
-            return AsCustom(Code.TemporaryRedirect, "text/html", new byte[0]);
+            return AsCustom(Code.TemporaryRedirect, "text/html", new byte[0])
+                .AddHeader("Location", uri);
         }
 
         public static Response AsCustom(Code code, string contentType, byte[] content)
